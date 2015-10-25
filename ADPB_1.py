@@ -35,7 +35,7 @@ if 'bedgraph' in infile.lower():
             
     file_out.close()            
 elif 'wig' in infile.lower():
-    file_out=open(sys.argv[1].replace('.wig', '2.bedgraph'), mode='w')
+    file_out=open(sys.argv[1].replace('.wig', '.bedgraph'), mode='w')
     chrom=''
     start=0
     step=0
