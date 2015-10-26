@@ -2,7 +2,6 @@ import sys
 import re
 f=open(sys.argv[1], 'r')
 contents = f.readlines()
-#print contents
 infile=str(sys.argv[1])
 if 'bedgraph' in infile.lower():
     file_out=open(sys.argv[1].replace('.bedgraph', '.wig'), mode='w')
@@ -10,18 +9,17 @@ if 'bedgraph' in infile.lower():
     for i in range(len(contents)):
 		
 		if contents[i][0:5]=='track':
-			#print "first line"
-			#start_type=re.search(r"[^a-zA-Z](type=)[^a-zA-Z]",contents[i]).start(1)
+
 			start_type=contents[i].find("type=")			
 			ss=contents[i][start_type+5:start_type+13]
-			#print ss
+			
 			file_out.write(contents[0].replace(ss, 'wiggle_0'))
 		else:
 			line=contents[i].strip().split('\t')
 			
 			
 			chr_first=line[0]
-			start=line[1]        
+			start=int(line[1])+1
 			span=int(line[2]) - int(line[1])
 			if i<len(contents)-1:
 				next_line=contents[i+1].strip().split('\t')
@@ -42,16 +40,16 @@ elif 'wig' in infile.lower():
     span=0
 	
     for i in range(len(contents)):	
-		#print contents[i][0:5]	
+		
 		if contents[i][0:5]=='track':
 			
 			file_out.write(contents[0].replace('wiggle_0', 'bedgraph'))
 		else:
-			#print contents[i]
+			
 			line=contents[i].strip().split()
 			if line[0]=='fixedStep':
 				chrom=line[1][6:]
-				start=int(line[2][6:])
+				start=int(line[2][6:])-1
 				step=int(line[3][5:])
 				span=int(line[4][5:])
 			elif line[0]=='variableStep':
@@ -63,8 +61,8 @@ elif 'wig' in infile.lower():
 					file_out.write(chrom+'\t'+str(start)+'\t'+str(start+span)+'\t'+str(value)+'\n')
 					start=start+step
 				else:
-					#print line
-					start=int(line[0])
+					
+					start=int(line[0])-1
 					value=float(line[1])
 					file_out.write(chrom+'\t'+str(start)+'\t'+str(start+span)+'\t'+str(value)+'\n')
     file_out.close()                
