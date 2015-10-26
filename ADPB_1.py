@@ -23,7 +23,7 @@ if 'bedgraph' in infile.lower():
 			span=int(line[2]) - int(line[1])
 			if i<len(contents)-1:
 				next_line=contents[i+1].strip().split('\t')
-				step_new=abs(int(next_line[1])-int(start))
+				step_new=abs(int(next_line[1])-int(line[1]))
 			else:
 				step_new=1
 			if step_new!=step:
